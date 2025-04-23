@@ -1,0 +1,92 @@
+// Header.h
+#pragma once
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class EquilateralTriangle {
+protected:
+    double a;
+public:
+    EquilateralTriangle();
+    virtual void area() const;
+    virtual void perimeter() const;
+    virtual void print() const;
+    virtual ~EquilateralTriangle() {}
+};
+
+class Tetrahedron : public EquilateralTriangle {
+public:
+    Tetrahedron();
+    void area() const override;
+    void perimeter() const override;
+    void print() const override;
+};
+
+// temp.cpp
+#include "Header.h"
+
+EquilateralTriangle::EquilateralTriangle() {
+    cout << "\nEnter side length of equilateral triangle: ";
+    cin >> a;
+}
+
+void EquilateralTriangle::area() const {
+    cout << "\nArea of triangle: " << (sqrt(3) / 4) * a * a;
+}
+
+void EquilateralTriangle::perimeter() const {
+    cout << "\nPerimeter of triangle: " << 3 * a;
+}
+
+void EquilateralTriangle::print() const {
+    cout << "\nEquilateral Triangle with side = " << a;
+}
+
+Tetrahedron::Tetrahedron() : EquilateralTriangle() {}
+
+void Tetrahedron::area() const {
+    cout << "\nSurface area of tetrahedron: " << sqrt(3) * a * a;
+}
+
+void Tetrahedron::perimeter() const {
+    cout << "\nSum of all edges of tetrahedron: " << 6 * a;
+}
+
+void Tetrahedron::print() const {
+    cout << "\nRegular Tetrahedron with edge = " << a;
+}
+
+// lab3.cpp
+#include "Header.h"
+
+void showInfo(const EquilateralTriangle* shape) {
+    shape->print();
+    shape->area();
+    shape->perimeter();
+    cout << "\n-----------------------\n";
+}
+
+int main() {
+    EquilateralTriangle* shapes[2];
+    shapes[0] = new EquilateralTriangle();
+    shapes[1] = new Tetrahedron();
+
+    for (int i = 0; i < 2; i++) {
+        showInfo(shapes[i]);
+        delete shapes[i];
+    }
+
+    // Додатковий приклад поліморфізму
+    EquilateralTriangle polyExample;
+    Tetrahedron polyExample2;
+    
+    EquilateralTriangle* polyPtr = &polyExample;
+    polyPtr->print();  // Виклик методу базового класу
+    
+    polyPtr = &polyExample2;
+    polyPtr->print();  // Виклик методу похідного класу (поліморфізм)
+
+    system("pause");
+    return 0;
+}
